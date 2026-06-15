@@ -4,4 +4,10 @@ service:
 	container_name : ai-model-api
 	posts:
 	    "8000:8000"
+			
+	volumes:
+      - "C:/Temp/ai-model-cicd-practice/app:/app"
+
+	environment:
+		- WATCHFILES_FORCE_POLLING=true
 	restart: always
