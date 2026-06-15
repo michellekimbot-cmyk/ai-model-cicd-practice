@@ -21,6 +21,14 @@ pipeline {
             }
         }
 
+        state('Debug Path') {
+            steps {
+                sh 'pwd'
+                sh 'ls -F'
+            }
+        }
+
+
         stage('Deploy') {
             steps {
                 
