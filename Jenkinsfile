@@ -21,7 +21,7 @@ pipeline {
             }
         }
 
-        state('Debug Path') {
+        stage('Debug Path') {
             steps {
                 sh 'pwd'
                 sh 'ls -F'
