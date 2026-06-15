@@ -1,11 +1,6 @@
 pipeline {
     
-    agent {
-        docker {
-            image 'docker:latest'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any
 
     environment {
         IMAGE_NAME = "michell0313/my_docker:latest"
@@ -21,12 +16,12 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
-
+               
                 sh '''
                 docker build -t ${IMAGE_NAME} .
                 '''
                 
-
+               
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-token', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                     sh '''
                     echo $PASS | docker login -u $USER --password-stdin
@@ -38,7 +33,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-
+               
                 sh '''
                 docker rm -f ${CONTAINER_NAME} || true
                 docker pull ${IMAGE_NAME}
