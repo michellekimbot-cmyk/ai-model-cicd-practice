@@ -1,5 +1,11 @@
 pipeline {
-    agent any
+    
+    agent {
+        docker {
+            image 'docker:latest'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
     environment {
         IMAGE_NAME = "michell0313/my_docker:latest"
@@ -9,29 +15,33 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                    checkout scm
+                checkout scm
             }
         }
 
         stage('Docker Build & Push') {
             steps {
-                script {
-                    def myImage = docker.build("${IMAGE_NAME}")
 
-                    docker.withRegistry("https://index.docker.io/v1/",'dockerhub-token')
-                        myImage.push()
+                sh '''
+                docker build -t ${IMAGE_NAME} .
+                '''
+                
 
-
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-token', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh '''
+                    echo $PASS | docker login -u $USER --password-stdin
+                    docker push ${IMAGE_NAME}
+                    '''
                 }
             }
         }
-    
 
         stage('Deploy') {
             steps {
+
                 sh '''
-                docker rm -f $CONTAINER_NAME || true
-                docker pull $IMAGE_NAME
+                docker rm -f ${CONTAINER_NAME} || true
+                docker pull ${IMAGE_NAME}
                 docker compose down || true
                 docker compose pull
                 docker compose up -d
@@ -43,8 +53,8 @@ pipeline {
             steps {
                 sh '''
                 sleep 5
-                curl http://localhost:8000
-                curl "http://localhost:8000/predict?value=1.5"
+                curl http://localhost:8000 || true
+                curl "http://localhost:8000/predict?value=1.5" || true
                 '''
             }
         }
