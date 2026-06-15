@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "bliss009/bliss_docker:latest"
+        IMAGE_NAME = "michell0313/my_docker:latest"
         CONTAINER_NAME = "ai-model-api"
     }
 
