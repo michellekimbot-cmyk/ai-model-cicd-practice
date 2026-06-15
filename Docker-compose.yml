@@ -1,13 +1,12 @@
-service:
+servicees:
     ai-model-api:
-	image: michelle0313/my_docker:latest
-	container_name : ai-model-api
-	posts:
-	    "8000:8000"
-			
-	volumes:
-      - "C:/Temp/ai-model-cicd-practice/app:/app"
+			image: michelle0313/my_docker:latest
+			container_name : ai-model-api
+			ports:
+					"8000:8000"	
+			volumes:
+					- "C:/Temp/ai-model-cicd-practice/app:/app"
 
-	environment:
-		- WATCHFILES_FORCE_POLLING=true
-	restart: always
+			environment:
+				- WATCHFILES_FORCE_POLLING=true
+			restart: always
