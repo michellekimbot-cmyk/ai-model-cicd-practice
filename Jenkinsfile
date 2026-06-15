@@ -5,6 +5,8 @@ pipeline {
     environment {
         IMAGE_NAME = "michell0313/my_docker:latest"
         CONTAINER_NAME = "ai-model-api"
+
+        HUB_USER = credentials('dockerhub-token')
     }
 
     stages {
