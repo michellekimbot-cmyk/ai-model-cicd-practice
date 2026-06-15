@@ -1,0 +1,7 @@
+service:
+    ai-model-api:
+	image: michelle0313/my_docker:latest
+	container_name : ai-model-api
+	posts:
+	    "8000:8000"
+	restart: always
